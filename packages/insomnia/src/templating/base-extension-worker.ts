@@ -1,7 +1,6 @@
 import { getAppPlatform, getAppVersion } from '../common/constants';
 import type { Request } from '../models/request';
 import type { Response } from '../models/response';
-import type { Workspace } from '../models/workspace';
 import type { Plugin } from '../plugins/index';
 import type { BaseRenderContext, PluginTemplateTag, PluginTemplateTagContext } from './types';
 import * as templating from './worker';
@@ -239,10 +238,10 @@ export default class BaseExtension {
             },
           },
           cookieJar: {
-            getOrCreateForWorkspace: async (workspace: Workspace) => {
+            getOrCreateForParentId: async (parentId: string) => {
               const resp = await fetch('insomnia-templating-worker-database://cookieJar.getOrCreateForParentId', {
                 method: 'post',
-                body: JSON.stringify({ parentId: workspace._id }),
+                body: JSON.stringify({ parentId }),
               });
 
               const cookieJar = await resp.json();
