@@ -23,6 +23,7 @@ type CreateProjectData =
       password: string;
       token: string;
       oauth2format?: OauthProviderName;
+      connectRepositoryLater: boolean;
     };
 
 export const createProject = async (organizationId: string, newProjectData: CreateProjectData) => {
@@ -41,6 +42,16 @@ export const createProject = async (organizationId: string, newProjectData: Crea
     }
 
     if (newProjectData.storageType === 'git') {
+      if (newProjectData.connectRepositoryLater) {
+        const project = await models.project.create({
+          name: newProjectData.name,
+          parentId: organizationId,
+          gitRepositoryId: 'empty',
+        });
+
+        return project._id;
+      }
+
       const { projectId, errors } = await window.main.git.cloneGitRepo({
         organizationId,
         ...newProjectData,
