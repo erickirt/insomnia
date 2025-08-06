@@ -130,6 +130,9 @@ export enum UpdateURL {
   windows = 'https://updates.insomnia.rest/updates/win',
 }
 
+// Oauth redirect URL
+export const getOauthRedirectUrl = () => env.OAUTH_REDIRECT_URL || 'https://app.insomnia.rest/oauth/redirect';
+
 // API
 export const getApiBaseURL = () => env.INSOMNIA_API_URL || 'https://api.insomnia.rest';
 export const getMockServiceURL = () => env.INSOMNIA_MOCK_API_URL || 'https://mock.insomnia.run';
