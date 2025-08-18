@@ -125,26 +125,39 @@ export const GitProjectSyncDropdown: FC<Props> = ({ gitRepository }) => {
   }, [gitStatusFetcher, projectId, shouldFetchGitRepoStatus]);
 
   useEffect(() => {
-    const errors = [...(gitPushFetcher.data?.errors ?? [])];
+    const data = gitPushFetcher.data;
+    if (!data) return;
+
+    const errors = data.errors ?? [];
+
     if (errors.length > 0) {
-      setPushCount(prevCount => prevCount + 1);
+      setPushCount(prev => prev + 1);
 
-      const hasPullError = errors.includes(GitVCSOperationErrors.RequiredPullRemoteChangesError);
-
-      if (hasPullError) {
-        !prevHadPullError.current && !isGitPullRequiredModalOpen && !isPulling && setIsGitPullRequiredModalOpen(true);
-      } else {
-        showToast({
-          icon,
-          title: `Push failed`,
-          status: 'error',
-        });
-        setOperationError(errors.join('\n'));
+      if (errors.includes(GitVCSOperationErrors.RequiredPullRemoteChangesError)) {
+        if (!prevHadPullError.current && !isGitPullRequiredModalOpen && !isPulling) {
+          setIsGitPullRequiredModalOpen(true);
+          prevHadPullError.current = false;
+        }
+        return;
       }
-    } else if (gitPushFetcher.data && 'success' in gitPushFetcher.data && gitPushFetcher.data.success && !isPulling) {
+
+      prevHadPullError.current = false;
+
+      // Other errors
       showToast({
         icon,
-        title: `Push completed`,
+        title: 'Push failed',
+        status: 'error',
+      });
+      setOperationError(errors.join('\n'));
+      return;
+    }
+
+    // Success
+    if ('success' in data && data.success && !isPulling) {
+      showToast({
+        icon,
+        title: 'Push completed',
         status: 'success',
       });
     }
@@ -648,7 +661,7 @@ export const GitProjectSyncDropdown: FC<Props> = ({ gitRepository }) => {
             fetchStatus();
           }}
           onClose={() => {
-            prevHadPullError.current = true;
+            prevHadPullError.current = false;
 
             setIsGitStagingModalOpen(false);
             setStagingMode(StagingModalModes.default);
@@ -681,7 +694,7 @@ export const GitProjectSyncDropdown: FC<Props> = ({ gitRepository }) => {
             fetchStatus();
           }}
           onClose={() => {
-            prevHadPullError.current = true;
+            prevHadPullError.current = false;
             setIsGitPullRequiredModalOpen(false);
           }}
         />
