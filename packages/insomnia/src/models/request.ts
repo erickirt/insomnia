@@ -335,12 +335,12 @@ export function create(patch: Partial<Request> = {}) {
   return db.docCreate<Request>(type, patch);
 }
 
-export function getById(id: string): Promise<Request | null> {
-  return db.get(type, id);
+export function getById(id: string): Promise<Request | undefined> {
+  return db.findOne<Request>(type, { _id: id });
 }
 
 export function getByParentId(parentId: string) {
-  return db.getWhere<Request>(type, { parentId: parentId });
+  return db.findOne<Request>(type, { parentId: parentId });
 }
 
 export function findByParentId(parentId: string) {
@@ -387,7 +387,7 @@ export function remove(request: Request) {
 }
 
 export async function all() {
-  return db.all<Request>(type);
+  return db.find<Request>(type);
 }
 
 // ~~~~~~~~~~ //

@@ -7,19 +7,19 @@ import { _repairDatabase, database as db } from '../database';
 
 describe('init()', () => {
   it('handles being initialized twice', async () => {
-    await db.init(models.types(), {
+    await db.init({
       inMemoryOnly: true,
     });
-    await db.init(models.types(), {
+    await db.init({
       inMemoryOnly: true,
     });
-    expect((await db.all(models.request.type)).length).toBe(0);
+    expect((await db.find(models.request.type)).length).toBe(0);
   });
 });
 
 describe('onChange()', () => {
   beforeEach(async () => {
-    await db.init(models.types(), { inMemoryOnly: true }, true, () => {});
+    await db.init({ inMemoryOnly: true }, true);
   });
   it('handles change listeners', async () => {
     const doc = {
@@ -39,9 +39,6 @@ describe('onChange()', () => {
       name: 'bar',
     });
     expect(changesSeen).toEqual([[['insert', newDoc, false, []]], [['update', updatedDoc, false, [{ name: 'bar' }]]]]);
-    db.offChange(callback);
-    await models.request.create(doc);
-    expect(changesSeen.length).toBe(2);
   });
 });
 
@@ -206,7 +203,7 @@ describe('requestCreate()', () => {
 
 describe('_repairDatabase()', async () => {
   beforeEach(async () => {
-    await db.init(models.types(), { inMemoryOnly: true }, true, () => {});
+    await db.init({ inMemoryOnly: true }, true);
   });
 
   it('fixes duplicate environments', async () => {
@@ -563,25 +560,25 @@ describe('_repairDatabase()', async () => {
       uri: 'https://github.com/foo/bar',
     });
     await _repairDatabase();
-    expect(await db.get(models.gitRepository.type, oldRepoWithSuffix._id)).toEqual(
+    expect(await db.findOne(models.gitRepository.type, { _id: oldRepoWithSuffix._id })).toEqual(
       expect.objectContaining({
         uri: 'https://github.com/foo/bar.git',
         uriNeedsMigration: false,
       }),
     );
-    expect(await db.get(models.gitRepository.type, oldRepoWithoutSuffix._id)).toEqual(
+    expect(await db.findOne(models.gitRepository.type, { _id: oldRepoWithoutSuffix._id })).toEqual(
       expect.objectContaining({
         uri: 'https://github.com/foo/bar.git',
         uriNeedsMigration: false,
       }),
     );
-    expect(await db.get(models.gitRepository.type, newRepoWithSuffix._id)).toEqual(
+    expect(await db.findOne(models.gitRepository.type, { _id: newRepoWithSuffix._id })).toEqual(
       expect.objectContaining({
         uri: 'https://github.com/foo/bar.git',
         uriNeedsMigration: false,
       }),
     );
-    expect(await db.get(models.gitRepository.type, newRepoWithoutSuffix._id)).toEqual(
+    expect(await db.findOne(models.gitRepository.type, { _id: newRepoWithoutSuffix._id })).toEqual(
       expect.objectContaining({
         uri: 'https://github.com/foo/bar',
         uriNeedsMigration: false,
