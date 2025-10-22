@@ -140,7 +140,7 @@ If you want to create a self-hosted mock server route from a request response in
               label: 'Name',
               onComplete: async name => {
                 invariant(activeResponse, 'Active response must be defined');
-                const body = 'bodyPath' in activeResponse ? await window.main.secureReadFile({ path: activeResponse.bodyPath }) : '';
+                const body = 'bodyPath' in activeResponse ? await fs.readFile(activeResponse.bodyPath) : '';
                 // auth mechanism is too sensitive to allow content length checks
                 const headersWithoutContentLength: ResponseHeader[] = activeResponse.headers.filter(
                   h => h.name.toLowerCase() !== 'content-length',
@@ -171,7 +171,7 @@ If you want to create a self-hosted mock server route from a request response in
               label: 'Name',
               onComplete: async name => {
                 invariant(activeResponse, 'Active response must be defined');
-                const body = 'bodyPath' in activeResponse ? await window.main.secureReadFile({ path: activeResponse.bodyPath }) : '';
+                const body = 'bodyPath' in activeResponse ? await fs.readFile(activeResponse.bodyPath) : '';
                 const hasRouteInServer = mockServerAndRoutes
                   .find(s => s._id === selectedMockServer)
                   ?.routes.find(r => r.name === name && r.method.toUpperCase() === 'GET');
