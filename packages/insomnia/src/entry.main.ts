@@ -5,8 +5,10 @@ import path from 'node:path';
 import electron, { app, BrowserWindow, session } from 'electron';
 import contextMenu from 'electron-context-menu';
 import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
+import { configureFetch } from 'insomnia-api';
 
 import { registerLLMConfigServiceAPI } from '~/main/llm-config-service';
+import { insomniaFetch } from '~/ui/insomnia-fetch';
 
 import { userDataFolder } from '../config/config.json';
 import { getAppVersion, getProductName, isDevelopment, isMac } from './common/constants';
@@ -32,7 +34,6 @@ import * as windowUtils from './main/window-utils';
 import * as models from './models/index';
 import type { Project, RemoteProject } from './models/project';
 import type { Stats } from './models/stats';
-
 // Override the Electron userData path
 // This makes Chromium use this folder for eg localStorage
 // ensure userData dir change is made before configure sentry SDK (https://docs.sentry.io/platforms/javascript/guides/electron/#app-userdata-directory)
@@ -46,6 +47,9 @@ initializeLogging();
 initializeSentry();
 
 registerInsomniaProtocols();
+
+// Force onlyResolveOnSuccess to true, will be removed after all usages are updated
+configureFetch(options => insomniaFetch({ ...options, onlyResolveOnSuccess: true }));
 
 // Handle potential auto-update
 if (checkIfRestartNeeded()) {

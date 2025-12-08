@@ -121,6 +121,22 @@ export default defineConfig([
   },
   {
     rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            // Shouldn't import packages by relative path
+            {
+              group: ['**/*/insomnia-api/**'],
+              message: "Please use 'insomnia-api' instead of relative paths",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    rules: {
       'default-case': 'error',
       'default-case-last': 'error',
       'eqeqeq': ['error', 'smart'],
