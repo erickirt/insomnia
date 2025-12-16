@@ -1,5 +1,5 @@
 import type { GitRepository } from '~/models/git-repository';
-import { getDefaultOAuthProvider } from '~/ui/components/modals/git-repository-settings-modal/git-project-repository-settings-modal';
+import { getDefaultOAuthProvider } from '~/ui/components/modals/git-repository-settings-modal/git-repository-settings-modal';
 
 import { GitProviderTag } from './git-provider-tag';
 
