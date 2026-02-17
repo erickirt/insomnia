@@ -77,7 +77,14 @@ const locationHistoryMiddleware: Route.ClientMiddlewareFunction = async ({ reque
     console.log('[locationHistoryMiddleware] Failed to store location history entry', err);
   }
 };
-
+const sanitizeUrlAndExtractOrigin = (url: string) => {
+  try {
+    const parsed = new URL(url);
+    return parsed.origin;
+  } catch {
+    return '';
+  }
+};
 export const clientMiddleware: Route.ClientMiddlewareFunction[] = [locationHistoryMiddleware];
 
 export const ErrorBoundary: FC<Route.ErrorBoundaryProps> = ({ error }) => {
@@ -344,6 +351,7 @@ const Root = () => {
 
         return logoutSubmit();
       }
+      // Supports params: uri, curl, origin
       if (urlWithoutParams === 'insomnia://app/import') {
         window.main.trackSegmentEvent({
           event: SegmentEvent.importStarted,
@@ -351,11 +359,20 @@ const Root = () => {
             source: 'import-url',
           },
         });
+
         if (params.uri) {
-          return setImportObject({ type: 'uri', defaultValue: params.uri, origin: params.origin });
+          return setImportObject({
+            type: 'uri',
+            defaultValue: params.uri,
+            origin: sanitizeUrlAndExtractOrigin(params.origin),
+          });
         }
         if (params.curl) {
-          return setImportObject({ type: 'curl', defaultValue: params.curl, origin: params.origin });
+          return setImportObject({
+            type: 'curl',
+            defaultValue: params.curl,
+            origin: sanitizeUrlAndExtractOrigin(params.origin),
+          });
         }
       }
       if (urlWithoutParams === 'insomnia://plugins/install') {
