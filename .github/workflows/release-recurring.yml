@@ -32,9 +32,9 @@ jobs:
             build-targets: zip
           - os: windows-latest
             build-targets: portable
-          - os: ubuntu-22.04
+          - os: ubuntu-24.04
             build-targets: tar.gz
-          - os: ubuntu-22.04-arm
+          - os: ubuntu-24.04-arm
             build-targets: tar.gz
     steps:
       - name: Checkout branch
@@ -53,6 +53,7 @@ jobs:
         run: npm ci
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
 
       - name: Install x64 version of native Mac dependencies
         run: npm run install-x64-native-dependencies -w insomnia
