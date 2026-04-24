@@ -53,6 +53,7 @@ export type HandleChannels =
   | 'git.diffFileLoader'
   | 'git.discardChanges'
   | 'git.fetchGitRemoteBranches'
+  | 'git.getProjectGitFileIssues'
   | 'git.validateGitRepositoryCredentials'
   | 'git.validateGitCredentialById'
   | 'git.getGitBranches'
@@ -69,7 +70,9 @@ export type HandleChannels =
   | 'git.pullFromGitRemote'
   | 'git.pushToGitRemote'
   | 'git.resetGitRepo'
+  | 'git.runAllGitRepoMigrations'
   | 'git.getCurrentBranchByRepositoryId'
+  | 'git.getBranchRemoteInfo'
   | 'git.stageChanges'
   | 'git.unstageChanges'
   | 'git.updateGitRepo'
@@ -216,7 +219,9 @@ export type RendererOnChannels =
   | 'toggle-sidebar'
   | 'show-oauth-authorization-modal'
   | 'hide-oauth-authorization-modal'
-  | 'mcp-auth-confirmation';
+  | 'mcp-auth-confirmation'
+  | 'git.db-synced'
+  | 'git.file-problems-changed';
 
 export const ipcMainOn = (
   channel: MainOnChannels,

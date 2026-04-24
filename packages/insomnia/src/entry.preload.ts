@@ -119,6 +119,7 @@ const git: GitServiceAPI = {
   loadGitRepository: options => ipcRenderer.invoke('git.loadGitRepository', options),
   getGitBranches: options => ipcRenderer.invoke('git.getGitBranches', options),
   fetchGitRemoteBranches: options => ipcRenderer.invoke('git.fetchGitRemoteBranches', options),
+  getProjectGitFileIssues: options => ipcRenderer.invoke('git.getProjectGitFileIssues', options),
   validateGitRepositoryCredentials: options => ipcRenderer.invoke('git.validateGitRepositoryCredentials', options),
   validateGitCredentialById: options => ipcRenderer.invoke('git.validateGitCredentialById', options),
   gitFetchAction: options => ipcRenderer.invoke('git.gitFetchAction', options),
@@ -155,6 +156,8 @@ const git: GitServiceAPI = {
   getGitProviderRepositories: options => ipcRenderer.invoke('git.getGitProviderRepositories', options),
   getGitProviderEmails: options => ipcRenderer.invoke('git.getGitProviderEmails', options),
   getCurrentBranchByRepositoryId: options => ipcRenderer.invoke('git.getCurrentBranchByRepositoryId', options),
+  getBranchRemoteInfo: options => ipcRenderer.invoke('git.getBranchRemoteInfo', options),
+  runAllGitRepoMigrations: () => ipcRenderer.invoke('git.runAllGitRepoMigrations'),
 };
 
 const llm: LLMConfigServiceAPI = {
