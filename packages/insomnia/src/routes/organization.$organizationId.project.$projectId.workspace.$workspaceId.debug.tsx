@@ -30,7 +30,6 @@ import * as reactUse from 'react-use';
 
 import { getProductName, SORT_ORDERS, type SortOrder, sortOrderName } from '~/common/constants';
 import { generateId } from '~/common/misc';
-import type { PlatformKeyCombinations } from '~/common/settings';
 import type {
   ChangeBufferEvent,
   Environment,
@@ -43,6 +42,7 @@ import type {
   Workspace,
 } from '~/insomnia-data';
 import { models, services } from '~/insomnia-data';
+import type { PlatformKeyCombinations } from '~/insomnia-data/common';
 import type { GrpcMethodInfo } from '~/main/ipc/grpc';
 import { useRootLoaderData } from '~/root';
 import {

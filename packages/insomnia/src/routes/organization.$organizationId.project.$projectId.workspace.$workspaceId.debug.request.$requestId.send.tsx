@@ -9,6 +9,7 @@ import type {
   Request,
   RequestGroup,
   RequestMeta,
+  RequestTestResult,
   ResponseInfo,
   RunnerResultPerRequestPerIteration,
   UserUploadEnvironment,
@@ -32,7 +33,6 @@ import { parseGraphQLReqeustBody } from '~/utils/graph-ql';
 import { invariant } from '~/utils/invariant';
 import { createFetcherSubmitHook } from '~/utils/router';
 
-import type { RequestTestResult } from '../../../insomnia-scripting-environment/src/objects';
 import type { Route } from './+types/organization.$organizationId.project.$projectId.workspace.$workspaceId.debug.request.$requestId.send';
 
 export interface SendActionParams {
